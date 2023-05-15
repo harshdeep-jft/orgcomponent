@@ -1,5 +1,8 @@
 {
-  "name": "OrgComponent",
+  "name": "@harshdeep-jft/OrgComponent",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/harshdeep-jft"
+  },
   "version": "2.10.1",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
