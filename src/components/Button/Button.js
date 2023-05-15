@@ -1,11 +1,13 @@
-import React from 'react'
 
-function Button() {
+import React from 'react';
+import { useDialog } from '../Dialog/DialogUtils';
+
+const Button = ({ text, onClick }) => {
+  const { open, openDialog, closeDialog } = useDialog();
+
   return (
-    <div>
-        <Button>click me </Button>
-    </div>
-  )
-}
+    <button onClick={openDialog}>{text}</button>
+  );
+};
 
-export default Button
+export default Button;

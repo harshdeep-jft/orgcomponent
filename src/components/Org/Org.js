@@ -12,60 +12,16 @@ import {
 
 import NodeCard from "../NodeCards/NodeCard";
 
-function convertJsonToItemData(data) {
-  let itemDataArray = [];
-
-  function appendJsonData(data, parent) {
-
-    let item = {};
-    item.id = `${data.organizationID}_${parent}`;
-    item.title = data.organizationCategory;
-    item.description = data.organizationName;
-    item.parent = parent;
-
-    itemDataArray.push(item);
-
-    if (data.children != null && data.children.length > 0) {
-      for (let i = 0; i < data.children.length; i++) {
-        let child = appendJsonData(data.children[i], item.id);
-        itemDataArray.push(child);
-      }
-      // item.templateName = 'DisableTemplate'
-    } else {
-      if (itemDataArray.length > 6) {
-        item.isVisible = false;
-      }
-    }
-
-    return item;
-  }
-
-  appendJsonData(data, null);
-
-
-  return itemDataArray;
-}
-function Org() {
-
-  const [customersData, setcustomersData] = useState([]);
+function Org({ customersData }) {
   const [cursorItem, setCursorItem] = useState(0);
-  const [index, setIndex] = useState(customersData.length);
+  const { innerWidth: width, innerHeight: height } = window;
 
-  useEffect(() => {
-    fetch("http://localhost:3000/items")
-      .then(response => response.json())
-      .then(data => {
-        let result = convertJsonToItemData(data);
-        setcustomersData(result)
-      })
-      .catch(error => {
-        console.error("Error fetching data: ", error);
-      });
-  }, []);
-  console.log('🚀  file:  ,Line: ,method: , ~ value: ,', customersData)
+
+  console.log('🚀  file:  ,Line: ,method: , ~ value: ,', customersData, customersData.length > 17 ? true : false)
 
   return (
     <div>
+      <div hidden id={`length-${customersData.length}`} className="dataLength" />
       <OrgDiagram
         centerOnCursor={true}
         config={{
@@ -79,7 +35,7 @@ function Org() {
           minimumVisibleLevels: 1,
 
           autoSizeMinimum: { width: 1024, height: 768 },
-          autoSizeMaximum: { width: 1920, height: 1080 },
+          autoSizeMaximum: { width: width, height: height },
           verticalAlignment: VerticalAlignmentType.Middle,
           horizontalAlignment: HorizontalAlignmentType.Left,
           childrenPlacementType: ChildrenPlacementType.Vertical,
@@ -106,7 +62,7 @@ function Org() {
             onItemRender: ({ context: itemConfig }) => {
               const hasChildren = customersData.filter(item => item.parent === itemConfig.id).length > 0;
               const isLeafNode = !hasChildren;
-
+              // $('#entity').data('length', `${customersData.length}`)
               return (
                 <div
                   className={`InfoTemplate ${hasChildren ? '' : 'clickable'} `}
