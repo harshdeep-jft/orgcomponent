@@ -6,7 +6,6 @@ import {
     DialogContent,
     DialogTitle,
     Box,
-    useMediaQuery,
     Slide,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -17,6 +16,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { forwardRef } from 'react';
 import { useDialog } from './DialogUtils';
+import { constant } from '../../constant/constant';
 
 const useStyles = makeStyles({
     dialogPaper: {
@@ -62,9 +62,8 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function OrgDialog() {
+function OrgDialog({ submitOnclick,NODE_ENV ='test'}) {
 
-    // const [open, setOpen] = useState(false);
     const [customersData, setcustomersData] = useState([]);
     const [maxWidth, setMaxWidth] = useState('md');
     const [fullScreen, setFullScreen] = useState(false);
@@ -73,10 +72,14 @@ function OrgDialog() {
     const classes = useStyles()
     const { open, openDialog, closeDialog } = useDialog();
 
+    const url = constant[NODE_ENV].url_wsWorkOrder
+
 
     useEffect(() => {
-        fetch("http://localhost:3000/items")
-            .then(response => response.json())
+        fetch(`${url}items`,{
+            method: "GET"
+        })
+        .then(response => response.json())
             .then(data => {
                 let result = convertJsonToItemData(data);
                 if (result.length > 50) {
@@ -91,11 +94,12 @@ function OrgDialog() {
             });
     }, []);
 
-    useEffect(() => {
-        $('#orgInput').on('click', function () {
-            openDialog();
-        });
-    }, []);
+    // useEffect(() => {
+    //     $('#orghierarchy').on('mousedown', function () {
+    //         console.log('🚀  set onmousedown')
+    //         openDialog();
+    //     });
+    // }, []);
 
 
     return (
@@ -109,7 +113,10 @@ function OrgDialog() {
                 maxWidth={maxWidth}
                 TransitionComponent={Transition}
                 open={open}
-                onClose={closeDialog}
+                onClose={() => {
+                    // $('#orghierarchy').attr('readonly', true);
+                    closeDialog()
+                }}
                 aria-labelledby="responsive-dialog-title"
             >
                 <DialogTitle id="responsive-dialog-title"
@@ -152,7 +159,10 @@ function OrgDialog() {
                             borderRadius: '8px'
                         }}
                     >
-                        <Button onClick={closeDialog} autoFocus
+                        <Button onClick={() => {
+                            submitOnclick();
+                            closeDialog();
+                        }} autoFocus
                             sx={{
                                 color: 'white',
                                 fontWeight: 'bold'

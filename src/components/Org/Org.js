@@ -14,10 +14,15 @@ import NodeCard from "../NodeCards/NodeCard";
 
 function Org({ customersData }) {
   const [cursorItem, setCursorItem] = useState(0);
+  const [selectedCard, setSelectedCard] = useState(null);
   const { innerWidth: width, innerHeight: height } = window;
+  const cardID = $('#entity').data('id');
 
-
-  console.log('🚀  file:  ,Line: ,method: , ~ value: ,', customersData, customersData.length > 17 ? true : false)
+  useEffect(() => {
+    if (cardID) {
+      setSelectedCard(cardID);
+    }
+  }, [])
 
   return (
     <div>
@@ -62,7 +67,7 @@ function Org({ customersData }) {
             onItemRender: ({ context: itemConfig }) => {
               const hasChildren = customersData.filter(item => item.parent === itemConfig.id).length > 0;
               const isLeafNode = !hasChildren;
-              // $('#entity').data('length', `${customersData.length}`)
+              $('#entity').data('length', `${customersData.length}`)
               return (
                 <div
                   className={`InfoTemplate ${hasChildren ? '' : 'clickable'} `}
@@ -71,8 +76,9 @@ function Org({ customersData }) {
                     event.stopPropagation();
                     if (isLeafNode) {
                       console.log('🚀  ~ value: ,', itemConfig.id, ':', itemConfig.description)
-                      // $('#entity').data('id', `${itemConfig.id}`)
-                      // $('#entity').data('value', `${itemConfig.description}`)
+                      setSelectedCard(itemConfig.id);
+                      $('#entity').data('id', `${itemConfig.id}`)
+                      $('#entity').data('value', `${itemConfig.description}`)
                     }
                   }}
                 >
@@ -80,7 +86,9 @@ function Org({ customersData }) {
                     title={itemConfig.title}
                     description={itemConfig.description}
                     data={customersData}
-                    itemConfig={itemConfig} />
+                    itemConfig={itemConfig}
+                    selectedCard={selectedCard}
+                    setSelectedCard={setSelectedCard} />
                 </div>
               );
             }

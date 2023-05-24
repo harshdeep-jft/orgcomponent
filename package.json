@@ -1,9 +1,9 @@
 {
-  "name": "@harshdeep-jft/OrgComponent",
+  "name": "@harshdeep-jft/orgcomponent",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/harshdeep-jft"
   },
-  "version": "2.10.1",
+  "version": "2.12.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "files": [
@@ -23,6 +23,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.4.0",
     "basicprimitives": "^6.5.1",
     "basicprimitivesreact": "^6.5.1",
     "react": "^18.2.0",
